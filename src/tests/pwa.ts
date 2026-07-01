@@ -10,9 +10,8 @@ const { PAGESPEED_API_URL, API_KEY, CAT_PWA } = constants;
  */
 const pwaTest = async (url: string, strategy: string, apiKey = API_KEY) => {
     try {
-        const response = await fetch(
-            `${PAGESPEED_API_URL}?url=${url}&strategy=${strategy}&category=${CAT_PWA}&key=${apiKey}`
-        );
+        const queryURL = `${PAGESPEED_API_URL}?url=${url}&strategy=${strategy}&category=${CAT_PWA}` + (apiKey ? `&key=${apiKey}` : "");
+        const response = await fetch(queryURL);
         const json = await response.json();
         const { lighthouseResult } = json;
         let fast_reliable = 0;

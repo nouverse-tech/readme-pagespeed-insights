@@ -9,7 +9,7 @@ const { PAGESPEED_API_URL, API_KEY } = constants;
  * @returns score
  */
 const simpleTest = async (url: string, category: string, strategy: string, apiKey = API_KEY) => {
-    const queryURL = `${PAGESPEED_API_URL}?url=${url}&strategy=${strategy}&category=${category}&key=${apiKey}`;
+    const queryURL = `${PAGESPEED_API_URL}?url=${url}&strategy=${strategy}&category=${category}` + (apiKey ? `&key=${apiKey}` : "");
     try {
         const response = await fetch(queryURL);
         const json = await response.json();
