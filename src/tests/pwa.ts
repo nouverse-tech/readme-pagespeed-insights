@@ -8,10 +8,10 @@ const { PAGESPEED_API_URL, API_KEY, CAT_PWA } = constants;
  * Test to get PWA score
  * @returns score
  */
-const pwaTest = async (url: string, strategy: string) => {
+const pwaTest = async (url: string, strategy: string, apiKey = API_KEY) => {
     try {
         const response = await fetch(
-            `${PAGESPEED_API_URL}?url=${url}&strategy=${strategy}&category=${CAT_PWA}&key=${API_KEY}`
+            `${PAGESPEED_API_URL}?url=${url}&strategy=${strategy}&category=${CAT_PWA}&key=${apiKey}`
         );
         const json = await response.json();
         const { lighthouseResult } = json;

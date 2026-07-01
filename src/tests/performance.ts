@@ -8,9 +8,9 @@ const { PAGESPEED_API_URL, API_KEY, CAT_PERF } = constants;
  * Performance test which requires multiple iterations to get better results
  * @returns score
  */
-const perfTest = async (url: string, strategy: string, iterations = 1) => {
+const perfTest = async (url: string, strategy: string, iterations = 1, apiKey = API_KEY) => {
     const category = CAT_PERF;
-    const queryURL = `${PAGESPEED_API_URL}?url=${url}&strategy=${strategy}&category=${category}&key=${API_KEY}`;
+    const queryURL = `${PAGESPEED_API_URL}?url=${url}&strategy=${strategy}&category=${category}&key=${apiKey}`;
     try {
         const responses = await Promise.all(new Array(iterations).fill(0).map(() => fetch(queryURL)));
         const jsons = await Promise.all(responses.map((response) => response.json()));

@@ -4,6 +4,7 @@ interface urlOptions {
     categories?: string[];
     theme?: string;
     perfCount?: number;
+    apiKey?: string;
 }
 
 export { urlOptions };

@@ -36,6 +36,7 @@ const processURL = (
     const theme = getSingleQueryParam(queryObject.theme) || constants.THEME_AGNOSTIC;
     const perfTestCount = getSingleQueryParam(queryObject.perfTestCount) || "1";
     const perfCount = parseInt(perfTestCount);
+    const apiKey = getSingleQueryParam(queryObject.key) || constants.API_KEY;
 
     if (isNaN(perfCount)) {
         return {
@@ -85,18 +86,19 @@ const processURL = (
         categories,
         theme,
         perfCount,
+        apiKey,
     };
 };
 
 app.get("/", async (req, res) => {
-    const { SITE_URL, strategy, categories, theme, perfCount, error } = processURL(req.url);
+    const { SITE_URL, strategy, categories, theme, perfCount, apiKey, error } = processURL(req.url);
 
     if (error) {
         res.status(400).send(error);
     }
 
     const options = { performance: { iterations: perfCount } };
-    const scores = await runTests(SITE_URL, categories, strategy, options);
+    const scores = await runTests(SITE_URL, categories, strategy, options, apiKey);
 
     const svg = buildSVG(
         theme,
