@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: readme-pagespeed-insights
+  namespace: default
+  labels:
+    app: readme-pagespeed-insights
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: readme-pagespeed-insights
+  template:
+    metadata:
+      labels:
+        app: readme-pagespeed-insights
+    spec:
+      hostNetwork: true
+      containers:
+        - name: app
+          image: readme-pagespeed-insights:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+              name: http
+          env:
+            - name: PORT
+              value: "3000"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: readme-pagespeed-insights-service
+  namespace: default
+spec:
+  selector:
+    app: readme-pagespeed-insights
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: readme-pagespeed-insights-ingress
+  namespace: default
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+spec:
+  rules:
+    - host: pgsi.nouverse.tech
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: readme-pagespeed-insights-service
+                port:
+                  number: 3000
+  tls:
+    - hosts:
+        - pgsi.nouverse.tech
+      secretName: nouverse-tls
