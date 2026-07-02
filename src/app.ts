@@ -22,6 +22,7 @@ const processURL = (
     url: string
 ): urlOptions & {
     error?: string;
+    statusCode?: number;
 } => {
     const queryObject = parseURL(url, true).query;
     const SITE_URL = getSingleQueryParam(queryObject.url);
@@ -37,6 +38,13 @@ const processURL = (
     const perfTestCount = getSingleQueryParam(queryObject.perfTestCount) || "1";
     const perfCount = parseInt(perfTestCount);
     const apiKey = getSingleQueryParam(queryObject.key) || constants.API_KEY;
+
+    if (!apiKey) {
+        return {
+            error: "API key is required. Please pass a valid API key using the `key` parameter or set the `API_KEY` environment variable.",
+            statusCode: 401,
+        };
+    }
 
     if (isNaN(perfCount)) {
         return {
@@ -91,10 +99,11 @@ const processURL = (
 };
 
 app.get("/", async (req, res) => {
-    const { SITE_URL, strategy, categories, theme, perfCount, apiKey, error } = processURL(req.url);
+    const { SITE_URL, strategy, categories, theme, perfCount, apiKey, error, statusCode } = processURL(req.url);
 
     if (error) {
-        res.status(400).send(error);
+        res.status(statusCode || 400).send(error);
+        return;
     }
 
     const options = { performance: { iterations: perfCount } };
