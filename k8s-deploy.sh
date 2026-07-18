@@ -10,7 +10,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR" || exit 1
 
 # Define worker nodes for image importing
-WORKERS=("10.18.1.107" "10.18.1.108")
+WORKERS=("10.18.1.111" "10.18.1.112")
 NAME="readme-pagespeed-insights"
 IMAGE_NAME="readme-pagespeed-insights:latest"
 MANIFEST_PATH="./k8s/deployment.yaml"
